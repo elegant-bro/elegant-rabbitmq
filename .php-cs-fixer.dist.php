@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use PhpCsFixerCustomFixers as KubawerlosCustomFixer;
-
 return
     (new PhpCsFixer\Config())
         ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
@@ -257,17 +255,8 @@ return
                     __DIR__,
                 ])
                 ->exclude([
-                    '.infra',
-                    'docker',
-                    'var',
+                    '.docker',
                     'vendor',
-                    'tests/_output',
-                    'tests/Support/_generated',
-                    'apps/*/tests/_output',
-                    'apps/*/tests/Support/_generated',
-                ])
-                ->notName([
-                    '*Kernel.php',
                 ]),
         )
         ->setUsingCache(false)

@@ -2,20 +2,24 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\Tests\Unit;
+namespace ElegantBro\RabbitMQ\Tests;
 
-use Codeception\Stub;
-use Codeception\Test\Unit;
 use ElegantBro\RabbitMQ\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PHPUnit\Framework\TestCase;
+use Throwable;
+use function PHPUnit\Framework\once;
 
-final class QueueTest extends Unit
+final class QueueTest extends TestCase
 {
+    /**
+     * @throws Throwable
+     */
     public function testDeclare(): void
     {
-        $ch = Stub::makeEmpty(AMQPChannel::class);
+        $ch = $this->createMock(AMQPChannel::class);
         $ch
-            ->expects($this->once())
+            ->expects(once())
             ->method('queue_declare')
             ->with(
                 'test_queue',
@@ -31,9 +35,12 @@ final class QueueTest extends Unit
         (new Queue('test_queue', false, true, false, false, false, ['foo' => 'bar']))->declare($ch);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testDelete(): void
     {
-        $ch = Stub::makeEmpty(AMQPChannel::class);
+        $ch = $this->createMock(AMQPChannel::class);
         $ch
             ->expects($this->once())
             ->method('queue_delete')

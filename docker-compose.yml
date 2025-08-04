@@ -10,3 +10,6 @@ services:
     user: "1000:1000"
     volumes:
       - .:/app
+    environment:
+      COMPOSER_MEMORY_LIMIT: 2G
+      COMPOSER_ALLOW_SUPERUSER: 0

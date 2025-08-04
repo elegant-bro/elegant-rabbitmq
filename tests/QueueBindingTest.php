@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\Tests\Unit;
+namespace ElegantBro\RabbitMQ\Tests;
 
-use Codeception\Stub;
-use Codeception\Test\Unit;
 use ElegantBro\RabbitMQ\QueueBinding;
-use Exception;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PHPUnit\Framework\TestCase;
+use Throwable;
+use function PHPUnit\Framework\once;
 
-final class QueueBindingTest extends Unit
+final class QueueBindingTest extends TestCase
 {
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function testBind(): void
     {
-        $ch = Stub::makeEmpty(AMQPChannel::class);
+        $ch = $this->createMock(AMQPChannel::class);
         $ch
-            ->expects($this->once())
+            ->expects(once())
             ->method('queue_bind')
             ->with(
                 'test_queue',
