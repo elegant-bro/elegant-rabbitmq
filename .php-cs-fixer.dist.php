@@ -8,6 +8,10 @@ return
         ->setRules([
         '@DoctrineAnnotation' => true,
         '@PSR12' => true,
+        '@PHP80Migration' => true,
+        '@PHP81Migration' => true,
+        '@PHP82Migration' => true,
+        '@PHP83Migration' => true,
         '@PHP84Migration' => true,
 
         //array fixers
@@ -136,10 +140,6 @@ return
         'php_unit_mock' => true,
         'php_unit_mock_short_will_return' => true,
         'php_unit_namespaced' => true,
-//      commented because of once is instance method and assert is static method
-//        'php_unit_test_case_static_method_calls' => [
-//            'call_type' => 'this',
-//        ],
         'php_unit_assert_new_names' => true,
         'php_unit_data_provider_static' => [
             'force' => true,

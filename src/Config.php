@@ -4,8 +4,38 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ;
 
-final readonly class Config
+final class Config
 {
+    /**
+     * @var Exchange[]
+     */
+    private array $exchanges;
+
+    /**
+     * @var Queue[]
+     */
+    private array $queues;
+
+    /**
+     * @var QueueBinding[]
+     */
+    private array $bindings;
+
+    /**
+     * @var QueueUnbinding[]
+     */
+    private array $unbindings;
+
+    /**
+     * @var Exchange[]
+     */
+    private array $deletingExchanges;
+
+    /**
+     * @var Queue[]
+     */
+    private array $deletingQueues;
+
     /**
      * @param Exchange[] $exchanges
      * @param Queue[] $queues
@@ -13,13 +43,20 @@ final readonly class Config
      * @param QueueUnbinding[] $unbindings
      */
     public function __construct(
-        private array $exchanges,
-        private array $queues,
-        private array $bindings,
-        private array $unbindings,
-        private array $deletingExchanges,
-        private array $deletingQueues,
-    ) {}
+        array $exchanges,
+        array $queues,
+        array $bindings,
+        array $unbindings,
+        array $deletingExchanges,
+        array $deletingQueues
+    ) {
+        $this->exchanges = $exchanges;
+        $this->queues = $queues;
+        $this->bindings = $bindings;
+        $this->unbindings = $unbindings;
+        $this->deletingExchanges = $deletingExchanges;
+        $this->deletingQueues = $deletingQueues;
+    }
 
     /**
      * @return Exchange[]

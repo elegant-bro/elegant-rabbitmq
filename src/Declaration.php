@@ -7,8 +7,20 @@ namespace ElegantBro\RabbitMQ;
 use PhpAmqpLib\Wire\AMQPTable;
 use function array_merge;
 
-final readonly class Declaration
+final class Declaration
 {
+    /**
+     * @var array{
+     * exchanges: Exchange[],
+     * queues: Queue[],
+     * bindings: QueueBinding[],
+     * unbindings: QueueUnbinding[],
+     * deletingExchanges: Exchange[],
+     * deletingQueues: Queue[],
+     * }
+     */
+    private array $d;
+
     public static function new(): self
     {
         return new self(
@@ -34,8 +46,10 @@ final readonly class Declaration
      * } $d
      */
     public function __construct(
-        private array $d,
-    ) {}
+        array $d
+    ) {
+        $this->d = $d;
+    }
 
     public function finish(): Config
     {
@@ -286,7 +300,7 @@ final readonly class Declaration
     }
 
     public function withoutExchange(
-        string $exchange,
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -296,7 +310,7 @@ final readonly class Declaration
     }
 
     public function withoutOutputRetryExchange(
-        string $exchange,
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -306,7 +320,7 @@ final readonly class Declaration
     }
 
     public function withoutDlxRetryTopology(
-        string $exchange,
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -317,7 +331,7 @@ final readonly class Declaration
     }
 
     public function withoutQueue(
-        string $name,
+        string $name
     ): self {
         $d = $this->d;
 

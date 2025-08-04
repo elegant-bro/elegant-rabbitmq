@@ -7,14 +7,30 @@ namespace ElegantBro\RabbitMQ;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final readonly class QueueUnbinding
+final class QueueUnbinding
 {
+    private string $name;
+
+    private string $exchange;
+
+    private string $key;
+
+    /**
+     * @var null|AMQPTable|array
+     */
+    private $args;
+
     public function __construct(
-        private string $name,
-        private string $exchange,
-        private string $key,
-        private null|AMQPTable|array $args = null,
-    ) {}
+        string $name,
+        string $exchange,
+        string $key,
+        $args
+    ) {
+        $this->args = $args;
+        $this->key = $key;
+        $this->exchange = $exchange;
+        $this->name = $name;
+    }
 
     public function unbind(AMQPChannel $ch): void
     {
