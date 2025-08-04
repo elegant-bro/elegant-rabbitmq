@@ -23,13 +23,13 @@
   "require-dev": {
     "roave/security-advisories": "dev-latest",
     "phpunit/phpunit": "^9.6",
-    "squizlabs/php_codesniffer": "^3.10",
-    "slevomat/coding-standard": "^8.15",
-    "rector/rector": "^2.0",
+    "squizlabs/php_codesniffer": "^3.13",
+    "slevomat/coding-standard": "^8.20",
+    "rector/rector": "^2.1",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpstan/phpstan-strict-rules": "^2.0",
     "phpstan/phpstan": "^2.1",
-    "friendsofphp/php-cs-fixer": "^3.82"
+    "friendsofphp/php-cs-fixer": "^3.85"
   },
   "autoload": {
     "psr-4": {
@@ -40,6 +40,13 @@
     "psr-4": {
       "ElegantBro\\RabbitMQ\\Tests\\": "tests"
     }
+  },
+  "replace": {
+    "symfony/polyfill-mbstring": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php74": "*"
   },
   "config": {
     "audit": {
