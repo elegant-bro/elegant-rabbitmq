@@ -18,10 +18,13 @@ final class QueueBinding
     private bool $nowait;
 
     /**
-     * @var null|AMQPTable|array
+     * @var null|AMQPTable|array<string, mixed>
      */
     private $args;
 
+    /**
+     * @param null|AMQPTable|array<string, mixed> $args
+     */
     public function __construct(
         string $name,
         string $exchange,

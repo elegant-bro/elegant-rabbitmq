@@ -42,7 +42,7 @@ final class QueueTest extends TestCase
     {
         $ch = $this->createMock(AMQPChannel::class);
         $ch
-            ->expects($this->once())
+            ->expects(once())
             ->method('queue_delete')
             ->with(
                 'test_queue',

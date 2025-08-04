@@ -84,12 +84,12 @@
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Namespaces/RequireOneNamespaceInFileSniff.php"/>
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Namespaces/NamespaceDeclarationSniff.php"/>
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Classes/SuperfluousInterfaceNamingSniff.php"/>
-    <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Classes/ClassConstantVisibilitySniff.php"/>
     <rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/Sniffs/Functions/StrictCallSniff.php"/>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
 
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ClassConstantTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="spacesCountAroundEqualsSign" value="0"/>
@@ -258,7 +258,7 @@
     <rule ref="SlevomatCodingStandard.PHP.UselessParentheses"/>
     <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
 
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint"/>
+<!--    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint"/>-->
 
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
 

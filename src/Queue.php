@@ -22,10 +22,13 @@ final class Queue
     private bool $noWait;
 
     /**
-     * @var null|array|AMQPTable
+     * @var null|AMQPTable|array<string, mixed>
      */
     private $args;
 
+    /**
+     * @param null|AMQPTable|array<string, mixed> $args
+     */
     public function __construct(
         string $name,
         bool $passive,
