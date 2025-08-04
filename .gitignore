@@ -1,0 +1,24 @@
+!.gitkeep
+/vendor/
+###< symfony/framework-bundle ###
+.idea
+compose.override.yaml
+compose.override.yml
+docker-compose.override.yml
+docker-compose.override.yaml
+.composer
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> phpunit/phpunit ###
+phpunit.xml
+.phpunit
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> codeception ###
+tests/_output/*
+tests/Support/_generated/*
+###< codeception ###

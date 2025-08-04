@@ -1,0 +1,57 @@
+{
+  "name": "elegant-bro/elegant-rabbitmq",
+  "license": [
+    "MIT"
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Pavel Stepanets",
+      "email": "pahhan.ne@gmail.com"
+    },
+    {
+      "name": "Dmitry Anikeev",
+      "email": "anikeev.dmitry@outlook.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.3",
+    "ext-sockets": "*",
+    "php-amqplib/php-amqplib": "^3.7"
+  },
+  "require-dev": {
+    "codeception/codeception": "^5.3",
+    "codeception/module-asserts": "^3.2",
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^11.4",
+    "squizlabs/php_codesniffer": "^3.10",
+    "slevomat/coding-standard": "^8.15",
+    "rector/rector": "^2.0",
+    "phpstan/phpstan-phpunit": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpstan/phpstan": "^2.1",
+    "friendsofphp/php-cs-fixer": "^3.82"
+  },
+  "autoload": {
+    "psr-4": {
+      "ElegantBro\\RabbitMQ\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ElegantBro\\RabbitMQ\\Tests\\": "tests"
+    }
+  },
+  "config": {
+    "platform-check": true,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}

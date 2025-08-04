@@ -1,0 +1,15 @@
+includes:
+  - 'vendor/phpstan/phpstan-strict-rules/rules.neon'
+parameters:
+  level: 8
+  inferPrivatePropertyTypeFromConstructor: true
+  paths:
+    - ./src
+    - ./tests
+  excludePaths:
+    - 'tests/Support/_generated/*'
+    - 'tests/_output/*'
+  strictRules:
+    allRules: true
+  ignoreErrors:
+    - identifier: missingType.iterableValue
