@@ -57,9 +57,23 @@
       "*": "dist"
     },
     "sort-packages": true,
-    "optimize-autoloader": true,
+    "classmap-authoritative": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "archive": {
+    "exclude": [
+      "/tests",
+      ".docker",
+      ".dockerignore",
+      ".php-cs-fixer.dist.php",
+      ".phpcs.xml",
+      "docker-compose.yml",
+      "Makefile",
+      "phpstan.neon",
+      "phpunit.xml.dist",
+      "rector.php"
+    ]
   }
 }
