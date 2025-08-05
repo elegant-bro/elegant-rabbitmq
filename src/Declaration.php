@@ -159,59 +159,12 @@ final class Declaration
         return new self($d);
     }
 
-    public function withDlxTopology(string $exchange, int $ttl): self
-    {
-        return
-            $this
-                ->withFanoutExchange($in = $exchange . '_in_dlx')
-                ->withDirectExchange($out = $exchange . '_out_dlx')
-                ->withQueue(
-                    $qDlx = $exchange . '.q_dlx',
-                    true,
-                    new AMQPTable(
-                        [
-                            'x-dead-letter-exchange' => $out,
-                            'x-message-ttl' => $ttl,
-                        ],
-                    ),
-                )
-                ->withBinding($in, $qDlx)
-                ->withQueue(
-                    $qRet = $exchange . '.q_retry',
-                    true,
-                    new AMQPTable(
-                        [
-                            'x-dead-letter-exchange' => $out,
-                        ],
-                    ),
-                )
-                ->withBinding($in, $qRet)
-        ;
-    }
-
     public function withOutputRetryExchange(string $exchange): self
     {
         return $this->withDirectExchange($exchange . '_out_dlx');
     }
 
-    public function withCustomRetryTopology(string $exchange): self
-    {
-        return $this
-            ->withFanoutExchange($in = $exchange . '_retry')
-            ->withQueue(
-                $qRet = $exchange . '.q_retry',
-                true,
-                new AMQPTable(
-                    [
-                        'x-dead-letter-exchange' => $exchange . '_out_dlx',
-                    ],
-                ),
-            )
-            ->withBinding($in, $qRet)
-        ;
-    }
-
-    public function withDlxRetryTopology(string $exchange, int $ttl): self
+    public function withDLXRetryTopology(string $exchange, int $ttl): self
     {
         return $this
             ->withFanoutExchange($in = $exchange . '_in_dlx')
@@ -319,7 +272,7 @@ final class Declaration
         return new self($d);
     }
 
-    public function withoutDlxRetryTopology(
+    public function withoutDLXRetryTopology(
         string $exchange
     ): self {
         $d = $this->d;
