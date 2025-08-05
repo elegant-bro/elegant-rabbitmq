@@ -110,11 +110,6 @@ final class Declaration
         return new self($d);
     }
 
-    public function withDurableQueue(string $name, ?AMQPTable $args = null): self
-    {
-        return $this->withQueue($name, true, $args);
-    }
-
     public function withQueueBinding(string $queue, BindPair $pair): self
     {
         $d = $this->d;
@@ -288,7 +283,7 @@ final class Declaration
     ): self {
         $d = $this->d;
 
-        $d['deletingQueues'][] = new Queue($name . '.q_dlx', false, true, false, false, false, []);
+        $d['deletingQueues'][] = new Queue($name, false, true, false, false, false, []);
 
         return new self($d);
     }
