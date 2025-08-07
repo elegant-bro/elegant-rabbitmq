@@ -7,8 +7,20 @@ namespace ElegantBro\RabbitMQ;
 use PhpAmqpLib\Wire\AMQPTable;
 use function array_merge;
 
-final readonly class Declaration
+final class Declaration
 {
+    /**
+     * @var array{
+     * exchanges: Exchange[],
+     * queues: Queue[],
+     * bindings: QueueBinding[],
+     * unbindings: QueueUnbinding[],
+     * deletingExchanges: Exchange[],
+     * deletingQueues: Queue[],
+     * }
+     */
+    private array $d;
+
     public static function new(): self
     {
         return new self(
@@ -34,8 +46,10 @@ final readonly class Declaration
      * } $d
      */
     public function __construct(
-        private array $d,
-    ) {}
+        array $d
+    ) {
+        $this->d = $d;
+    }
 
     public function finish(): Config
     {
@@ -96,11 +110,6 @@ final readonly class Declaration
         return new self($d);
     }
 
-    public function withDurableQueue(string $name, ?AMQPTable $args = null): self
-    {
-        return $this->withQueue($name, true, $args);
-    }
-
     public function withQueueBinding(string $queue, BindPair $pair): self
     {
         $d = $this->d;
@@ -145,59 +154,12 @@ final readonly class Declaration
         return new self($d);
     }
 
-    public function withDlxTopology(string $exchange, int $ttl): self
-    {
-        return
-            $this
-                ->withFanoutExchange($in = $exchange . '_in_dlx')
-                ->withDirectExchange($out = $exchange . '_out_dlx')
-                ->withQueue(
-                    $qDlx = $exchange . '.q_dlx',
-                    true,
-                    new AMQPTable(
-                        [
-                            'x-dead-letter-exchange' => $out,
-                            'x-message-ttl' => $ttl,
-                        ],
-                    ),
-                )
-                ->withBinding($in, $qDlx)
-                ->withQueue(
-                    $qRet = $exchange . '.q_retry',
-                    true,
-                    new AMQPTable(
-                        [
-                            'x-dead-letter-exchange' => $out,
-                        ],
-                    ),
-                )
-                ->withBinding($in, $qRet)
-        ;
-    }
-
     public function withOutputRetryExchange(string $exchange): self
     {
         return $this->withDirectExchange($exchange . '_out_dlx');
     }
 
-    public function withCustomRetryTopology(string $exchange): self
-    {
-        return $this
-            ->withFanoutExchange($in = $exchange . '_retry')
-            ->withQueue(
-                $qRet = $exchange . '.q_retry',
-                true,
-                new AMQPTable(
-                    [
-                        'x-dead-letter-exchange' => $exchange . '_out_dlx',
-                    ],
-                ),
-            )
-            ->withBinding($in, $qRet)
-        ;
-    }
-
-    public function withDlxRetryTopology(string $exchange, int $ttl): self
+    public function withDLXRetryTopology(string $exchange, int $ttl): self
     {
         return $this
             ->withFanoutExchange($in = $exchange . '_in_dlx')
@@ -286,7 +248,7 @@ final readonly class Declaration
     }
 
     public function withoutExchange(
-        string $exchange,
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -296,7 +258,7 @@ final readonly class Declaration
     }
 
     public function withoutOutputRetryExchange(
-        string $exchange,
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -305,8 +267,8 @@ final readonly class Declaration
         return new self($d);
     }
 
-    public function withoutDlxRetryTopology(
-        string $exchange,
+    public function withoutDLXRetryTopology(
+        string $exchange
     ): self {
         $d = $this->d;
 
@@ -317,11 +279,11 @@ final readonly class Declaration
     }
 
     public function withoutQueue(
-        string $name,
+        string $name
     ): self {
         $d = $this->d;
 
-        $d['deletingQueues'][] = new Queue($name . '.q_dlx', false, true, false, false, false, []);
+        $d['deletingQueues'][] = new Queue($name, false, true, false, false, false, []);
 
         return new self($d);
     }

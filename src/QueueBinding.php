@@ -7,15 +7,37 @@ namespace ElegantBro\RabbitMQ;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final readonly class QueueBinding
+final class QueueBinding
 {
+    private string $name;
+
+    private string $exchange;
+
+    private string $key;
+
+    private bool $nowait;
+
+    /**
+     * @var null|AMQPTable|array<string, mixed>
+     */
+    private $args;
+
+    /**
+     * @param null|AMQPTable|array<string, mixed> $args
+     */
     public function __construct(
-        private string $name,
-        private string $exchange,
-        private string $key,
-        private bool $nowait,
-        private null|AMQPTable|array $args = null,
-    ) {}
+        string $name,
+        string $exchange,
+        string $key,
+        bool $nowait,
+        $args
+    ) {
+        $this->args = $args;
+        $this->nowait = $nowait;
+        $this->key = $key;
+        $this->exchange = $exchange;
+        $this->name = $name;
+    }
 
     public function bind(AMQPChannel $ch): void
     {

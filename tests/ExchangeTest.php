@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\Tests\Unit;
+namespace ElegantBro\RabbitMQ\Tests;
 
-use Codeception\Stub;
-use Codeception\Test\Unit;
 use ElegantBro\RabbitMQ\Exchange;
-use Exception;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PHPUnit\Framework\TestCase;
+use Throwable;
+use function PHPUnit\Framework\once;
 
-final class ExchangeTest extends Unit
+final class ExchangeTest extends TestCase
 {
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function testDeclare(): void
     {
-        $ch = Stub::makeEmpty(AMQPChannel::class);
+        $ch = $this->createMock(AMQPChannel::class);
         $ch
-            ->expects($this->once())
+            ->expects(once())
             ->method('exchange_declare')
             ->with(
                 'test_exchange',
@@ -34,13 +34,13 @@ final class ExchangeTest extends Unit
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function testDelete(): void
     {
-        $ch = Stub::makeEmpty(AMQPChannel::class);
+        $ch = $this->createMock(AMQPChannel::class);
         $ch
-            ->expects($this->once())
+            ->expects(once())
             ->method('exchange_delete')
             ->with('test_exchange')
         ;

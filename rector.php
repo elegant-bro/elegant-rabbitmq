@@ -95,7 +95,5 @@ return
             __DIR__ . '/src',
             __DIR__ . '/tests',
         ])
-        ->withSkipPath(__DIR__ . '/tests/_output')
-        ->withSkipPath(__DIR__ . '/tests/Support/_generated')
         ->withFileExtensions(['php'])
 ;

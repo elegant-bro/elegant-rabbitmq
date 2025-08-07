@@ -1,13 +1,7 @@
 php:=docker compose run --rm --remove-orphans app
 
 composer-install:
-	$(php) COMPOSER_MEMORY_LIMIT=2G COMPOSER_ALLOW_SUPERUSER=0 composer install
-
-codecept-build: composer-install
-	$(php) vendor/bin/codecept -c tests/codeception.yml build
-
-codecept: codecept-build
-	$(php) vendor/bin/codecept -c tests/codeception.yml run
+	$(php) composer install
 
 sniffer-check:
 	$(php) vendor/bin/phpcs -p
@@ -29,3 +23,6 @@ rector-fix:
 
 phpstan:
 	$(php) vendor/bin/phpstan analyze --no-progress -c phpstan.neon
+
+tests: composer-install
+	$(php) vendor/bin/phpunit

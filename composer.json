@@ -16,22 +16,20 @@
     }
   ],
   "require": {
-    "php": ">=8.3",
+    "php": "^7.4||^8.0",
     "ext-sockets": "*",
-    "php-amqplib/php-amqplib": "^3.7"
+    "php-amqplib/php-amqplib": "^3.0"
   },
   "require-dev": {
-    "codeception/codeception": "^5.3",
-    "codeception/module-asserts": "^3.2",
     "roave/security-advisories": "dev-latest",
-    "phpunit/phpunit": "^11.4",
-    "squizlabs/php_codesniffer": "^3.10",
-    "slevomat/coding-standard": "^8.15",
-    "rector/rector": "^2.0",
+    "phpunit/phpunit": "^9.6",
+    "squizlabs/php_codesniffer": "^3.13",
+    "slevomat/coding-standard": "^8.20",
+    "rector/rector": "^2.1",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpstan/phpstan-strict-rules": "^2.0",
     "phpstan/phpstan": "^2.1",
-    "friendsofphp/php-cs-fixer": "^3.82"
+    "friendsofphp/php-cs-fixer": "^3.85"
   },
   "autoload": {
     "psr-4": {
@@ -43,15 +41,39 @@
       "ElegantBro\\RabbitMQ\\Tests\\": "tests"
     }
   },
+  "replace": {
+    "symfony/polyfill-mbstring": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-php73": "*",
+    "symfony/polyfill-php74": "*"
+  },
   "config": {
+    "audit": {
+      "abandoned": "report"
+    },
     "platform-check": true,
     "preferred-install": {
       "*": "dist"
     },
     "sort-packages": true,
-    "optimize-autoloader": true,
+    "classmap-authoritative": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "archive": {
+    "exclude": [
+      "/tests",
+      ".docker",
+      ".dockerignore",
+      ".php-cs-fixer.dist.php",
+      ".phpcs.xml",
+      "docker-compose.yml",
+      "Makefile",
+      "phpstan.neon",
+      "phpunit.xml.dist",
+      "rector.php"
+    ]
   }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\Tests\Unit;
+namespace ElegantBro\RabbitMQ\Tests;
 
 use ElegantBro\RabbitMQ\BindPair;
 use PHPUnit\Framework\TestCase;

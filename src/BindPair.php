@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ;
 
-final readonly class BindPair
+final class BindPair
 {
+    private string $exchange;
+
+    private string $key;
+
     public function __construct(
-        private string $exchange,
-        private string $key,
-    ) {}
+        string $exchange,
+        string $key
+    ) {
+        $this->exchange = $exchange;
+        $this->key = $key;
+    }
 
     public function exchange(): string
     {

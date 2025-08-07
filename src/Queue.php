@@ -7,17 +7,45 @@ namespace ElegantBro\RabbitMQ;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final readonly class Queue
+final class Queue
 {
+    private string $name;
+
+    private bool $passive;
+
+    private bool $durable;
+
+    private bool $exclusive;
+
+    private bool $autoDelete;
+
+    private bool $noWait;
+
+    /**
+     * @var null|AMQPTable|array<string, mixed>
+     */
+    private $args;
+
+    /**
+     * @param null|AMQPTable|array<string, mixed> $args
+     */
     public function __construct(
-        private string $name,
-        private bool $passive,
-        private bool $durable,
-        private bool $exclusive,
-        private bool $autoDelete,
-        private bool $noWait,
-        private null|AMQPTable|array $args,
-    ) {}
+        string $name,
+        bool $passive,
+        bool $durable,
+        bool $exclusive,
+        bool $autoDelete,
+        bool $noWait,
+        $args
+    ) {
+        $this->args = $args;
+        $this->noWait = $noWait;
+        $this->autoDelete = $autoDelete;
+        $this->exclusive = $exclusive;
+        $this->durable = $durable;
+        $this->passive = $passive;
+        $this->name = $name;
+    }
 
     public function declare(AMQPChannel $ch): void
     {
