@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\Tests;
 
+use ElegantBro\RabbitMQ\BindPair;
 use ElegantBro\RabbitMQ\Declaration;
 use ElegantBro\RabbitMQ\Tests\Support\ArrayWithConsecutive;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -48,13 +49,12 @@ final class DeclarationTest extends TestCase
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withExchange('exchange_1', 'topic')
-                ->withExchange('exchange_2', 'direct')
-                ->withExchange('exchange_3', 'fanout')
-                ->finish()->exchanges() as $exchange
-        ) {
+        foreach (Declaration::new()
+            ->withExchange('exchange_1', 'topic')
+            ->withExchange('exchange_2', 'direct')
+            ->withExchange('exchange_3', 'fanout')
+            ->finish()
+            ->exchanges() as $exchange) {
             $exchange->declare($ch);
         }
     }
@@ -82,13 +82,12 @@ final class DeclarationTest extends TestCase
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withoutExchange('exchange_1')
-                ->withoutExchange('exchange_2')
-                ->withoutExchange('exchange_3')
-                ->finish()->deletingExchanges() as $exchange
-        ) {
+        foreach (Declaration::new()
+            ->withoutExchange('exchange_1')
+            ->withoutExchange('exchange_2')
+            ->withoutExchange('exchange_3')
+            ->finish()
+            ->deletingExchanges() as $exchange) {
             $exchange->delete($ch);
         }
     }
@@ -161,13 +160,12 @@ final class DeclarationTest extends TestCase
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withQueue('queue_1', true, new AMQPTable(['foo' => 'bar1']))
-                ->withQueue('queue_2', true, new AMQPTable(['foo' => 'bar2']))
-                ->withQueue('queue_3', true, new AMQPTable(['foo' => 'bar3']))
-                ->finish()->queues() as $queue
-        ) {
+        foreach (Declaration::new()
+            ->withQueue('queue_1', false, true, false, false, false, new AMQPTable(['foo' => 'bar1']))
+            ->withQueue('queue_2', false, true, false, false, false, new AMQPTable(['foo' => 'bar2']))
+            ->withQueue('queue_3', false, true, false, false, false, new AMQPTable(['foo' => 'bar3']))
+            ->finish()
+            ->queues() as $queue) {
             $queue->declare($ch);
         }
     }
@@ -195,13 +193,12 @@ final class DeclarationTest extends TestCase
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withoutQueue('queue_1')
-                ->withoutQueue('queue_2')
-                ->withoutQueue('queue_3')
-                ->finish()->deletingQueues() as $queue
-        ) {
+        foreach (Declaration::new()
+            ->withoutQueue('queue_1')
+            ->withoutQueue('queue_2')
+            ->withoutQueue('queue_3')
+            ->finish()
+            ->deletingQueues() as $queue) {
             $queue->delete($ch);
         }
     }
@@ -235,13 +232,12 @@ final class DeclarationTest extends TestCase
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withBinding('exchange_1', 'queue_1', 'key_1')
-                ->withBinding('exchange_2', 'queue_2', 'key_2')
-                ->withBinding('exchange_3', 'queue_3', 'key_3')
-                ->finish()->bindings() as $binding
-        ) {
+        foreach (Declaration::new()
+            ->bindToQueue('queue_1', [new BindPair('exchange_1', 'key_1')])
+            ->bindToQueue('queue_2', [new BindPair('exchange_2', 'key_2')])
+            ->bindToQueue('queue_3', [new BindPair('exchange_3', 'key_3')])
+            ->finish()
+            ->bindings() as $binding) {
             $binding->bind($ch);
         }
     }
@@ -259,29 +255,40 @@ final class DeclarationTest extends TestCase
                             'queue_1',
                             'exchange_1',
                             'key_1',
+                            [],
                         ],
                         [
                             'queue_2',
                             'exchange_2',
                             'key_2',
+                            [],
                         ],
                         [
                             'queue_3',
                             'exchange_3',
                             'key_3',
+                            [],
                         ],
                     ],
                 ))(),
             )
         ;
 
-        foreach (
-            Declaration::new()
-                ->withoutBinding('exchange_1', 'queue_1', 'key_1')
-                ->withoutBinding('exchange_2', 'queue_2', 'key_2')
-                ->withoutBinding('exchange_3', 'queue_3', 'key_3')
-                ->finish()->unbindings() as $binding
-        ) {
+        foreach (Declaration::new()
+            ->unbindFromQueue(
+                'queue_1',
+                [new BindPair('exchange_1', 'key_1')],
+            )
+            ->unbindFromQueue(
+                'queue_2',
+                [new BindPair('exchange_2', 'key_2')],
+            )
+            ->unbindFromQueue(
+                'queue_3',
+                [new BindPair('exchange_3', 'key_3')],
+            )
+            ->finish()
+            ->unbindings() as $binding) {
             $binding->unbind($ch);
         }
     }
