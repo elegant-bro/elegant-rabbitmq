@@ -3,19 +3,20 @@
 Let's say we have some abstract pizza order flow
 
 ```php
+
+use ElegantBro\RabbitMQ\BindPair;
+use ElegantBro\RabbitMQ\Declaration;
+
 $config = Declaration::new()
-    ->withDirectExchange('app.pizza_exchange')
-    ->withQueueBind(
+    ->withExchange('app.pizza_exchange', 'direct')
+    ->withQueue('app.pizza_order_queue')
+    ->bindToQueue(
         'app.pizza_order_queue',
-        true,
         [
             new BindPair('app.pizza_exchange', 'ordered'),
             new BindPair('app.pizza_exchange', 'cooking'),
             new BindPair('app.pizza_exchange', 'courier_has_left'),
             new BindPair('app.pizza_exchange', 'delivered'),
-        ],
-        [
-            'some_additional_param' => 'some_additional_value'
         ],
     )
     ->finish()
@@ -23,14 +24,18 @@ $config = Declaration::new()
 
 and then in some command which runs at your CI/CD pipeline 
 ```php
+
+use PhpAmqpLib\Connection\AbstractConnection;
+use ElegantBro\RabbitMQ\Config;
+
 class DoRabbitDeclarationCommand
 {
-    private PhpAmqpLib\Connection\AbstractConnection $rabbitConn;
+    private AbstractConnection $rabbitConn;
     
     private Config $config
        
     public function __construct(
-        PhpAmqpLib\Connection\AbstractConnection $rabbitConn,
+        AbstractConnection $rabbitConn,
         Config $config,
     ) {
         $this->rabbitConn = $rabbitConn;
@@ -65,21 +70,22 @@ Once defined you could leave this code as it is. If you run this command once ag
 
 ## Example of exchanges or queues manipulation after it is created
 
-Let's say we would like to unbind `cooking` pair from queue. Of course, you could simple login to Rabbit management page and stuff there, but... 
+Let's say we would like to unbind `cooking` pair from queue. Of course, you could simple login to Rabbit management page and stuff there, but...
 
 ```php
+
+use ElegantBro\RabbitMQ\BindPair;
+use ElegantBro\RabbitMQ\Declaration;
+
 $config = Declaration::new()
-    ->withDirectExchange('app.pizza_exchange')
-    ->withQueueBind(
+    ->withExchange('app.pizza_exchange', 'direct')
+    ->withQueue('app.pizza_order_queue')
+    ->bindToQueue(
         'app.pizza_order_queue',
-        true,
         [
             new BindPair('app.pizza_exchange', 'ordered'),
             new BindPair('app.pizza_exchange', 'courier_has_left'),
             new BindPair('app.pizza_exchange', 'delivered'),
-        ],
-        [
-            'some_additional_param' => 'some_additional_value'
         ],
     )
     ->unbindFromQueue(
@@ -87,8 +93,7 @@ $config = Declaration::new()
         [
             new BindPair('app.pizza_exchange', 'cooking'),
         ],
-    )
-    
+    )    
     ->finish()
 ```
 
@@ -97,6 +102,9 @@ and after deployment `cooking` will unbind. Before your next release, if you wan
 Next, once upon a time your PM will tell you we are now switching from pizza delivery to sushi delivery. We do not need pizza queue and exchange anymore
 
 ```php
+
+use ElegantBro\RabbitMQ\Declaration;
+
 $config = Declaration::new()
     ->withoutQueue('app.pizza_order_queue',)
     ->withoutExchange('app.pizza_exchange')    
