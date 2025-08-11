@@ -110,3 +110,60 @@ $config = Declaration::new()
     ->withoutExchange('app.pizza_exchange')    
     ->finish()
 ```
+
+## V2 Version
+To declare queue
+
+```php
+use ElegantBro\RabbitMQ\V2\Broker\ChainOfCalls;
+use ElegantBro\RabbitMQ\V2\Broker\ExchangeDeclare;
+use ElegantBro\RabbitMQ\V2\Broker\QueueDeclare;
+use PhpAmqpLib\Wire\AMQPTable;
+use ElegantBro\RabbitMQ\V2\Broker\QueueBind;
+use ElegantBro\RabbitMQ\V2\Broker\QueueUnbind;
+
+(new ChainOfCalls(
+    new ExchangeDeclare(
+        'app.pizza_exchange',
+        'direct',
+        false,
+        true,
+        false,
+    ),
+    new QueueDeclare(
+        new WithArgumentsQueue(
+                new AMQPTable([]),
+                new DurableQueue(
+                    new NoAutoDeleteQueue(
+                        JustQueue::default(
+                            'app.pizza_order_queue',
+                        ),
+                    ),
+                ),
+            )    
+    ),
+    new QueueBind(
+        'app.pizza_order_queue',
+        'app.pizza_exchange',
+        'ordered',
+        false,
+    ),
+    new QueueBind(
+        'app.pizza_order_queue',
+        'app.pizza_exchange',
+        'courier_has_left',
+        false,
+    ),
+    new QueueBind(
+        'app.pizza_order_queue',
+        'app.pizza_exchange',
+        'delivered',
+        false,
+    ),
+    new QueueUnbind(
+        'app.pizza_order_queue',
+        'app.pizza_exchange',
+        'cooking',
+    )
+))->call($ch);
+```
