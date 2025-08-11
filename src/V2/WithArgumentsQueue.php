@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2\Specs;
+namespace ElegantBro\RabbitMQ\V2;
 
 use PhpAmqpLib\Wire\AMQPTable;
 
@@ -12,10 +12,8 @@ final class WithArgumentsQueue implements Queue
 
     private Queue $original;
 
-    public function __construct(
-        AMQPTable $args,
-        Queue $original
-    ) {
+    public function __construct(AMQPTable $args, Queue $original)
+    {
         $this->args = $args;
         $this->original = $original;
     }

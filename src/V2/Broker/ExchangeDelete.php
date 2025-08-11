@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2;
+namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 
-final class QueueToDelete implements RabbitRPC
+final class ExchangeDelete implements BrokerRemoteFunction
 {
     private string $queue;
 
@@ -17,6 +17,6 @@ final class QueueToDelete implements RabbitRPC
 
     public function call(AMQPChannel $ch): void
     {
-        $ch->queue_delete($this->queue);
+        $ch->exchange_delete($this->queue);
     }
 }

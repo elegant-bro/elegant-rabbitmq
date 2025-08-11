@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2;
+namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final class BindToQueue implements RabbitRPC
+final class QueueBind implements BrokerRemoteFunction
 {
     private string $queue;
 
@@ -30,7 +30,7 @@ final class BindToQueue implements RabbitRPC
         string $exchange,
         string $routingKey,
         bool $nowait,
-        $args
+        $args = null
     ) {
         $this->queue = $queue;
         $this->exchange = $exchange;

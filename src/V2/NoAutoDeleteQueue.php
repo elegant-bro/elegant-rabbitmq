@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2\Specs;
+namespace ElegantBro\RabbitMQ\V2;
 
 final class NoAutoDeleteQueue implements Queue
 {

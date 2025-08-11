@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2\Specs;
+namespace ElegantBro\RabbitMQ\V2;
 
 use PhpAmqpLib\Wire\AMQPTable;
 
@@ -44,7 +44,7 @@ final class JustQueue implements Queue
         bool $exclusive,
         bool $autoDelete,
         bool $nowait,
-        $args
+        $args = null
     ) {
         $this->args['name'] = $name;
         $this->args['passive'] = $passive;

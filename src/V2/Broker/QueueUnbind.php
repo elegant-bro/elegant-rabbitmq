@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2;
+namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final class UnbindFromQueue implements RabbitRPC
+final class QueueUnbind implements BrokerRemoteFunction
 {
     private string $name;
 
@@ -24,15 +24,15 @@ final class UnbindFromQueue implements RabbitRPC
      * @param null|AMQPTable|array<string, mixed> $args
      */
     public function __construct(
-        string $name,
+        string $queue,
         string $exchange,
-        string $key,
-        $args
+        string $routingKey,
+        $args = null
     ) {
-        $this->args = $args;
-        $this->key = $key;
+        $this->name = $queue;
         $this->exchange = $exchange;
-        $this->name = $name;
+        $this->key = $routingKey;
+        $this->args = $args;
     }
 
     public function call(AMQPChannel $ch): void

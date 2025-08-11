@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2;
+namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 
-final class ExchangeToDeclare implements RabbitRPC
+final class ExchangeDeclare implements BrokerRemoteFunction
 {
     private string $name;
 
@@ -25,11 +25,11 @@ final class ExchangeToDeclare implements RabbitRPC
         bool $durable,
         bool $autoDelete
     ) {
-        $this->autoDelete = $autoDelete;
-        $this->durable = $durable;
-        $this->passive = $passive;
-        $this->type = $type;
         $this->name = $name;
+        $this->type = $type;
+        $this->passive = $passive;
+        $this->durable = $durable;
+        $this->autoDelete = $autoDelete;
     }
 
     public function call(AMQPChannel $ch): void

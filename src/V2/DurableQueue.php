@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2\Specs;
+namespace ElegantBro\RabbitMQ\V2;
 
 final class DurableQueue implements Queue
 {
     private Queue $original;
 
-    public function __construct(
-        Queue $original
-    ) {
+    public function __construct(Queue $original)
+    {
         $this->original = $original;
     }
 

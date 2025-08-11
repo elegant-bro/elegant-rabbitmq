@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2\Composition;
 
-use ElegantBro\RabbitMQ\V2\Specs\DurableQueue;
-use ElegantBro\RabbitMQ\V2\Specs\JustQueue;
-use ElegantBro\RabbitMQ\V2\Specs\NoAutoDeleteQueue;
-use ElegantBro\RabbitMQ\V2\Specs\Queue;
-use ElegantBro\RabbitMQ\V2\Specs\WithArgumentsQueue;
+use ElegantBro\RabbitMQ\V2\DurableQueue;
+use ElegantBro\RabbitMQ\V2\JustQueue;
+use ElegantBro\RabbitMQ\V2\NoAutoDeleteQueue;
+use ElegantBro\RabbitMQ\V2\Queue;
+use ElegantBro\RabbitMQ\V2\WithArgumentsQueue;
 use PhpAmqpLib\Wire\AMQPTable;
 
 final class NoAutoDeleteDurableQueue implements Queue
