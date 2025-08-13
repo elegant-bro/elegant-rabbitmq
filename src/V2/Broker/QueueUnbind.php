@@ -7,7 +7,7 @@ namespace ElegantBro\RabbitMQ\V2\Broker;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final class QueueUnbind implements BrokerRemoteFunction
+final class QueueUnbind implements BrokerFunction
 {
     private string $name;
 
@@ -16,18 +16,18 @@ final class QueueUnbind implements BrokerRemoteFunction
     private string $key;
 
     /**
-     * @var null|AMQPTable|array<string, mixed>
+     * @var null|array<string, mixed>
      */
-    private $args;
+    private ?array $args;
 
     /**
-     * @param null|AMQPTable|array<string, mixed> $args
+     * @param array<string, mixed>|null $args
      */
     public function __construct(
         string $queue,
         string $exchange,
         string $routingKey,
-        $args = null
+        ?array $args = null
     ) {
         $this->name = $queue;
         $this->exchange = $exchange;
@@ -41,7 +41,7 @@ final class QueueUnbind implements BrokerRemoteFunction
             $this->name,
             $this->exchange,
             $this->key,
-            $this->args ?? [],
+            null !== $this->args ? new AMQPTable($this->args) : [],
         );
     }
 }

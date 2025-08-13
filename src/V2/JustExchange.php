@@ -4,53 +4,42 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2;
 
-final class JustQueue implements Queue
+final class JustExchange implements Exchange
 {
     /**
      * @var array{
      * name: string,
+     * type: string,
      * passive: bool,
      * durable: bool,
-     * exclusive: bool,
-     * auto_delete: bool,
-     * nowait: bool,
-     * args: null|array<string, mixed>
+     * auto_delete: bool
      * }
      */
     private array $args;
 
-    public static function default(string $name): Queue
+    public static function default(string $name, string $type): Exchange
     {
         return new self(
             $name,
-            false,
+            $type,
             false,
             false,
             true,
-            false,
-            null,
         );
     }
 
-    /**
-     * @param array<string, mixed>|null $args
-     */
     public function __construct(
         string $name,
+        string $type,
         bool $passive,
         bool $durable,
-        bool $exclusive,
-        bool $autoDelete,
-        bool $nowait,
-        ?array $args = null
+        bool $autoDelete
     ) {
         $this->args['name'] = $name;
+        $this->args['type'] = $type;
         $this->args['passive'] = $passive;
         $this->args['durable'] = $durable;
-        $this->args['exclusive'] = $exclusive;
         $this->args['auto_delete'] = $autoDelete;
-        $this->args['nowait'] = $nowait;
-        $this->args['args'] = $args;
     }
 
     public function asArray(): array

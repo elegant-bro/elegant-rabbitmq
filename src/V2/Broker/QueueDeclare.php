@@ -9,12 +9,12 @@ use ElegantBro\RabbitMQ\V2\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
-final class QueueDeclare implements BrokerRemoteFunction
+final class QueueDeclare implements BrokerFunction
 {
     private Queue $q;
 
     /**
-     * @param null|AMQPTable|array<string, mixed> $args
+     * @param array<string, mixed>|null $args
      */
     public static function fromPrimitives(
         string $name,
@@ -23,7 +23,7 @@ final class QueueDeclare implements BrokerRemoteFunction
         bool $exclusive,
         bool $autoDelete,
         bool $nowait,
-        $args = null
+        ?array $args = null
     ): self {
         return new self(
             new JustQueue(
@@ -54,7 +54,7 @@ final class QueueDeclare implements BrokerRemoteFunction
             $input['exclusive'],
             $input['auto_delete'],
             $input['nowait'],
-            $input['args'] ?? [],
+            null !== $input['args'] ? new AMQPTable($input['args']) : [],
         );
     }
 }

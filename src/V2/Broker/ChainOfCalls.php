@@ -6,14 +6,14 @@ namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 
-final class ChainOfCalls implements BrokerRemoteFunction
+final class ChainOfCalls implements BrokerFunction
 {
     /**
-     * @var iterable<BrokerRemoteFunction>
+     * @var iterable<BrokerFunction>
      */
     private iterable $functions;
 
-    public function __construct(BrokerRemoteFunction ...$functions)
+    public function __construct(BrokerFunction ...$functions)
     {
         $this->functions = $functions;
     }

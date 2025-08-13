@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2;
 
-final class NoAutoDeleteQueue implements Queue
+final class NoAutodeleteQueue implements Queue
 {
     private Queue $original;
 

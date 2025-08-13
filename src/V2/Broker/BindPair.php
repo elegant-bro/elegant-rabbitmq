@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2\Broker;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Wire\AMQPTable;
-
-final class QueueBind implements BrokerFunction
+final class BindPair
 {
-    private string $queue;
-
     private string $exchange;
 
     private string $routingKey;
@@ -23,30 +18,27 @@ final class QueueBind implements BrokerFunction
     private ?array $args;
 
     /**
-     * @param array<string, mixed>|null $args
+     * @param null|array<string, mixed> $args
      */
     public function __construct(
-        string $queue,
         string $exchange,
         string $routingKey,
         bool $nowait = false,
         ?array $args = null
     ) {
-        $this->queue = $queue;
         $this->exchange = $exchange;
         $this->routingKey = $routingKey;
         $this->nowait = $nowait;
         $this->args = $args;
     }
 
-    public function call(AMQPChannel $ch): void
+    public function bind(string $queue): BrokerFunction
     {
-        $ch->queue_bind(
-            $this->queue,
-            $this->exchange,
-            $this->routingKey,
-            $this->nowait,
-            null !== $this->args ? new AMQPTable($this->args) : [],
-        );
+        return new QueueBind($queue, $this->exchange, $this->routingKey, $this->nowait, $this->args);
+    }
+
+    public function unbind(string $queue): BrokerFunction
+    {
+        return new QueueUnbind($queue, $this->exchange, $this->routingKey, $this->args);
     }
 }

@@ -6,7 +6,7 @@ namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 
-final class QueueDelete implements BrokerRemoteFunction
+final class QueueDelete implements BrokerFunction
 {
     private string $queue;
 

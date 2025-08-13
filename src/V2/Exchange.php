@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2;
 
-interface Queue
+interface Exchange
 {
     /**
      * @return array{
      *  name: string,
+     *  type: string,
      *  passive: bool,
      *  durable: bool,
-     *  exclusive: bool,
-     *  auto_delete: bool,
-     *  nowait: bool,
-     *  args: null|array<string, mixed>
+     *  auto_delete: bool
      *  }
      */
     public function asArray(): array;

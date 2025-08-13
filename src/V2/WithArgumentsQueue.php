@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2;
 
-use PhpAmqpLib\Wire\AMQPTable;
+use function array_merge_recursive;
 
 final class WithArgumentsQueue implements Queue
 {
-    private AMQPTable $args;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $args;
 
     private Queue $original;
 
-    public function __construct(AMQPTable $args, Queue $original)
+    /**
+     * @param array<string, mixed> $args
+     */
+    public function __construct(array $args, Queue $original)
     {
         $this->args = $args;
         $this->original = $original;
@@ -21,7 +27,10 @@ final class WithArgumentsQueue implements Queue
     public function asArray(): array
     {
         $q = $this->original->asArray();
-        $q['args'] = $this->args;
+        $q['args'] = array_merge_recursive(
+            $this->args,
+            $q['args'] ?? [],
+        );
         return $q;
     }
 }
