@@ -5,45 +5,50 @@ declare(strict_types=1);
 namespace ElegantBro\RabbitMQ\V2\Broker;
 
 use ElegantBro\RabbitMQ\V2\Exchange;
-use ElegantBro\RabbitMQ\V2\JustExchange;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 final class ExchangeDeclare implements BrokerFunction
 {
-    private Exchange $specs;
+    private string $name;
+    private string $type;
+    private bool $passive;
+    private bool $durable;
+    private bool $autoDelete;
 
-    public static function fromPrimitives(
+    public function __construct(
         string $name,
         string $type,
         bool $passive,
         bool $durable,
         bool $autoDelete
-    ): self {
+    ) {
+        $this->name = $name;
+        $this->type = $type;
+        $this->passive = $passive;
+        $this->durable = $durable;
+        $this->autoDelete = $autoDelete;
+    }
+
+    public static function fromExchange(Exchange $exchange): self
+    {
+        $args = $exchange->asArray();
         return new self(
-            new JustExchange(
-                $name,
-                $type,
-                $passive,
-                $durable,
-                $autoDelete,
-            ),
-        );
-    }
-
-    public function __construct(Exchange $specs)
-    {
-        $this->specs = $specs;
-    }
-
-    public function call(AMQPChannel $ch): void
-    {
-        $args = $this->specs->asArray();
-        $ch->exchange_declare(
             $args['name'],
             $args['type'],
             $args['passive'],
             $args['durable'],
             $args['auto_delete'],
+        );
+    }
+
+    public function call(AMQPChannel $ch): void
+    {
+        $ch->exchange_declare(
+            $this->name,
+            $this->type,
+            $this->passive,
+            $this->durable,
+            $this->autoDelete,
         );
     }
 }

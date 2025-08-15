@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ElegantBro\RabbitMQ\V2\Broker\Queue;
 
 use Closure;
-use ElegantBro\RabbitMQ\V2\Broker\BindPair;
 use ElegantBro\RabbitMQ\V2\Broker\BrokerFunction;
 use ElegantBro\RabbitMQ\V2\Broker\ChainOfCalls;
 use ElegantBro\RabbitMQ\V2\Broker\QueueDelete;

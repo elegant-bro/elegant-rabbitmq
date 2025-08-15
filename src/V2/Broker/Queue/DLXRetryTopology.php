@@ -21,7 +21,7 @@ use ElegantBro\RabbitMQ\V2\WithArgumentsQueue;
 
 final class DLXRetryTopology
 {
-    private Exchange $exchange;
+    private string $exchange;
 
     private string $inSuffix;
 
@@ -31,8 +31,25 @@ final class DLXRetryTopology
 
     private int $ttl;
 
-    public function __construct(
+    public static function fromExchange(
         Exchange $exchange,
+        string $inSuffix,
+        string $outSuffix,
+        string $queueSuffix,
+        int $ttl
+    ): self
+    {
+        return new self(
+            $exchange->asArray()['name'],
+            $inSuffix,
+            $outSuffix,
+            $queueSuffix,
+            $ttl,
+        );
+    }
+
+    public function __construct(
+        string $exchange,
         string $inSuffix,
         string $outSuffix,
         string $queueSuffix,
@@ -47,25 +64,23 @@ final class DLXRetryTopology
 
     public function composition(): BrokerFunction
     {
-        $exchangeName = $this->exchange->asArray()['name'];
-
         return
             new ChainOfCalls(
-                new ExchangeDeclare(
+                ExchangeDeclare::fromExchange(
                     new NoAutodeleteExchange(
                         new DurableExchange(
-                            JustExchange::default($outExchange = $exchangeName . $this->outSuffix, 'direct'),
+                            JustExchange::default($outExchange = $this->exchange . $this->outSuffix, 'direct'),
                         ),
                     ),
                 ),
-                new ExchangeDeclare(
+                ExchangeDeclare::fromExchange(
                     new NoAutodeleteExchange(
                         new DurableExchange(
-                            JustExchange::default($inExchange = $exchangeName . $this->inSuffix, 'fanout'),
+                            JustExchange::default($inExchange = $this->exchange . $this->inSuffix, 'fanout'),
                         ),
                     ),
                 ),
-                new QueueDeclare(
+                QueueDeclare::fromQueue(
                     new WithArgumentsQueue(
                         [
                             'x-dead-letter-exchange' => $outExchange,
@@ -73,7 +88,7 @@ final class DLXRetryTopology
                         ],
                         new NoAutodeleteQueue(
                             new DurableQueue(
-                                JustQueue::default($queueRetry = $exchangeName . $this->queueSuffix),
+                                JustQueue::default($queueRetry = $this->exchange . $this->queueSuffix),
                             ),
                         ),
                     ),
@@ -90,7 +105,7 @@ final class DLXRetryTopology
     {
         return new WithArgumentsQueue(
             [
-                'x-dead-letter-exchange' => $this->exchange->asArray()['name'] . $this->inSuffix,
+                'x-dead-letter-exchange' => $this->exchange . $this->inSuffix,
                 'x-dead-letter-routing-key' => $queue->asArray()['name'],
             ],
             $queue,

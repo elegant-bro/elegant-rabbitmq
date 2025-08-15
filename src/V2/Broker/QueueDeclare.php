@@ -4,19 +4,36 @@ declare(strict_types=1);
 
 namespace ElegantBro\RabbitMQ\V2\Broker;
 
-use ElegantBro\RabbitMQ\V2\JustQueue;
 use ElegantBro\RabbitMQ\V2\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Wire\AMQPTable;
 
 final class QueueDeclare implements BrokerFunction
 {
-    private Queue $q;
+    private string $name;
+    private bool $passive;
+    private bool $durable;
+    private bool $exclusive;
+    private bool $autoDelete;
+    private bool $nowait;
+    private ?array $args;
 
-    /**
-     * @param array<string, mixed>|null $args
-     */
-    public static function fromPrimitives(
+    public static function fromQueue(Queue $q): self
+    {
+        $input = $q->asArray();
+
+        return new self(
+            $input['name'],
+            $input['passive'],
+            $input['durable'],
+            $input['exclusive'],
+            $input['auto_delete'],
+            $input['nowait'],
+            $input['args'],
+        );
+    }
+
+    public function __construct(
         string $name,
         bool $passive,
         bool $durable,
@@ -24,37 +41,27 @@ final class QueueDeclare implements BrokerFunction
         bool $autoDelete,
         bool $nowait,
         ?array $args = null
-    ): self {
-        return new self(
-            new JustQueue(
-                $name,
-                $passive,
-                $durable,
-                $exclusive,
-                $autoDelete,
-                $nowait,
-                $args,
-            ),
-        );
-    }
-
-    public function __construct(Queue $q)
+    )
     {
-        $this->q = $q;
+        $this->name = $name;
+        $this->passive = $passive;
+        $this->durable = $durable;
+        $this->exclusive = $exclusive;
+        $this->autoDelete = $autoDelete;
+        $this->nowait = $nowait;
+        $this->args = $args;
     }
 
     public function call(AMQPChannel $ch): void
     {
-        $input = $this->q->asArray();
-
         $ch->queue_declare(
-            $input['name'],
-            $input['passive'],
-            $input['durable'],
-            $input['exclusive'],
-            $input['auto_delete'],
-            $input['nowait'],
-            null !== $input['args'] ? new AMQPTable($input['args']) : [],
+            $this->name,
+            $this->passive,
+            $this->durable,
+            $this->exclusive,
+            $this->autoDelete,
+            $this->nowait,
+            null !== $this->args ? new AMQPTable($this->args) : [],
         );
     }
 }

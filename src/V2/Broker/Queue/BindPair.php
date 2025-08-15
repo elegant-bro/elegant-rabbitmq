@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ElegantBro\RabbitMQ\V2\Broker;
+namespace ElegantBro\RabbitMQ\V2\Broker\Queue;
+
+use ElegantBro\RabbitMQ\V2\Broker\BrokerFunction;
+use ElegantBro\RabbitMQ\V2\Broker\QueueBind;
+use ElegantBro\RabbitMQ\V2\Broker\QueueUnbind;
 
 final class BindPair
 {
